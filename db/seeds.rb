@@ -5,15 +5,15 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-
-users = User.create(
-  [
-    { username: 'Erik',   email: 'erik@momentum.io' },
-    { username: 'Gesi',   email: 'gesi@momentum.io' },
-    { username: 'Chris',  email: 'chris@momentum.io' },
-    { username: 'Jurgen', email: 'jurgen@momentum.io' }
-  ]
-)
+[
+  ['Erik', 'erik@momentum.io'],
+  ['Gesi', 'gesi@momentum.io'],
+  ['Chris', 'chris@momentum.io'],
+  ['Jurgen', 'jurgen@momentum.io']
+].each do |username, email|
+  User.create(username: username, email: email,
+              password: 'secretpwd', password_confirmation: 'secretpwd')
+end
 
 places = Place.create(
   [
@@ -24,7 +24,8 @@ places = Place.create(
       latitude: -33.870775,
       neighborhood: 'Soho',
       city: 'New York City',
-      country: 'USA'
+      country: 'USA',
+      google_place_id: 'ChIJ6xvs94VZwokRnT1D2lX2OTw'
     },
     {
       name: 'Best Pizza',
@@ -33,7 +34,8 @@ places = Place.create(
       latitude: -73.965175,
       neighborhood: 'Williamsburg',
       city: 'New York City',
-      country: 'USA'
+      country: 'USA',
+      google_place_id: 'ChIJzWhpTVlZwokRRyrw-O4FIxI'
     },
     {
       name: 'Vinnies Pizzeria',
@@ -42,7 +44,8 @@ places = Place.create(
       latitude: -73.965175,
       neighborhood: 'Williamsburg',
       city: 'New York City',
-      country: 'USA'
+      country: 'USA',
+      google_place_id: 'ChIJbSt7rF1ZwokRrnJ-xbOu0i4'
     },
     {
       name: 'Solo Pizza NYC',
@@ -51,16 +54,17 @@ places = Place.create(
       latitude: -73.9841435,
       neighborhood: 'East Village',
       city: 'New York City',
-      country: 'USA'
+      country: 'USA',
+      google_place_id: 'ChIJZdq6eIJZwokR1iNy89Pax3Y'
     }
   ]
 )
 
-recommendations = Recommendation.create(
-  [
-    { intention: 'eat', user: users[0], place: places[0] },
-    { intention: 'eat', user: users[1], place: places[0] },
-    { intention: 'eat', user: users[2], place: places[0] },
-    { intention: 'eat', user: users[3], place: places[0] },
-  ]
-)
+place = Place.first
+User.all.each do |user|
+  Recommendation.create(intention: 'eat', user: user, place: place,
+                        by_role: Recommendation::BY_ROLES.sample,
+                        time: Recommendation::TIMES.sample,
+                        day: Recommendation::DAYS.sample
+                        )
+end
